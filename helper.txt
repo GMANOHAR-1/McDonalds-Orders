@@ -1,0 +1,111 @@
+API URL : https://mcdelivery.co.in/my-orders
+
+Request URL: https://be.mcdelivery.co.in/order/user-orders/
+Request Method: POST
+
+
+Request Headers : 
+accept:  application/json, text/plain, */*
+authorization: JWT  
+content-type: application/json
+mds-pinfo: product information
+referer: https://mcdelivery.co.in/
+ 
+
+
+
+
+Response Headers :
+
+access-control-allow-origin: *
+allow: POST, OPTIONS
+content-length: 2
+content-type: application/json
+date: Mon, 09 Dec 2024 09:54:28 GMT
+referrer-policy: same-origin
+server: undisclosed
+vary: Origin
+x-content-type-options: nosniff
+x-frame-options: DENY
+
+
+fetch method
+
+ 
+async function fetchOrders() {
+  
+  let jwtToken = localStorage.getItem("CapacitorStorage.token");
+
+  if (!jwtToken) {
+    console.error("JWT token not found in local storage.");
+    return;
+  }
+
+  
+  jwtToken = jwtToken.startsWith('"') && jwtToken.endsWith('"') 
+    ? jwtToken.slice(1, -1) 
+    : jwtToken;
+
+  //api url - endpoint
+  const apiUrl = "https://be.mcdelivery.co.in/order/user-orders/";
+
+  try {
+   
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "accept": "application/json, text/plain, */*",
+        "authorization": `JWT ${jwtToken}`,
+        "content-type": "application/json",
+        "mds-pinfo": "product information",
+        "referer": "https://mcdelivery.co.in/" 
+      },
+      body: JSON.stringify({})  
+    });
+
+  
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+   
+    const data = await response.json();
+
+  
+    if (!data || data.length === 0) {
+      console.log("No orders found.");
+      return;
+    }
+ 
+    const structuredData = data.map(order => ({
+      orderId: order.id,
+      date: order.date,
+      items: order.items.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      total: order.total,
+    }));
+
+    
+    console.log("Structured Orders:", structuredData);
+
+  
+    structuredData.forEach(order => {
+      console.log(`Order ID: ${order.orderId}, Total: ${order.total}`);
+    });
+  } catch (error) {
+    console.error("Error fetching orders:", error.message);
+  }
+}
+
+ 
+fetchOrders();
+
+
+
+
+
+
+

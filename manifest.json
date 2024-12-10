@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "McDelivery Orders",
+    "version": "1.0",
+    "permissions": ["storage", "activeTab", "scripting"],
+    "host_permissions": ["https://be.mcdelivery.co.in/*"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://mcdelivery.co.in/*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
+  
