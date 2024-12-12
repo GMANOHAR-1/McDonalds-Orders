@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (results && results[0] && results[0].result) {
             const jwtToken = results[0].result;
             chrome.runtime.sendMessage(
-              { type: "AUTH_TOKEN", token: jwtToken },
+              { type: "AUTH_TOKEN", token : jwtToken },
               (response) => {
                 if (response.error) {
                   console.error("Error fetching orders:", response.error);
