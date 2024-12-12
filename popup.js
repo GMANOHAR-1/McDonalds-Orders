@@ -29,9 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 ordersContainer.innerHTML = "";
                 let totalSpent = 0;
                 const orders = response.orders;
- 
+
                 orders.forEach((order) => {
-                  totalSpent += order.orderTotal;
+                 
+                  order.items.forEach((item) => {
+                    if (item.status.toLowerCase() !== "cancelled") {
+                      totalSpent += item.price;
+                    }
+                  });
 
                   const orderEl = document.createElement("div");
                   orderEl.classList.add("order");
@@ -46,7 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
                           .map(
                             (item) => `
                               <li>
-                                
                                 <strong>${item.itemName}</strong> - ₹${item.price.toFixed(
                                   2
                                 )} (${item.status})
